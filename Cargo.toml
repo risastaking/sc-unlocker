@@ -1,18 +1,5 @@
 [workspace]
 members = [
-  "dex",
-  "dex/farm",
-  "dex/farm/abi",
-  "dex/pair",
-  "dex/pair/abi",
-  "dex/router",
-  "dex/router/abi",
-
-  "locked-asset/",
-  "locked-asset/distribution",
-  "locked-asset/distribution/abi",
-  "locked-asset/proxy-dex",
-  "locked-asset/proxy-dex/abi",
-  "locked-asset/factory",
-  "locked-asset/factory/abi",
+    "adder",
+    "adder/abi"
 ]
