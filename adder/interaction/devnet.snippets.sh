@@ -20,11 +20,11 @@ deploy() {
     echo "Smart contract address: ${ADDRESS}"
 }
 
-addTokenAllowed() {
+addFromToken() {
     erdpy --verbose contract call ${ADDRESS} --recall-nonce --pem=${ALICE} --gas-limit=50000000 \
-    --function="addTokenAllowed" --arguments ${TOKEN_2} --send
+    --function="addFromToken" --arguments ${TOKEN_2} --send
 }
 
-getTokensAllowed() {
-    erdpy --verbose contract query ${ADDRESS} --function="getTokensAllowed"
+getFromTokens() {
+    erdpy --verbose contract query ${ADDRESS} --function="getFromTokens"
 }

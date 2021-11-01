@@ -9,6 +9,10 @@
                 "address:owner": {
                     "nonce": "1",
                     "balance": "0"
+                },
+                "address:not_owner": {
+                    "nonce": "44",
+                    "balance": "50"
                 }
             },
             "newAddresses": [
@@ -26,7 +30,8 @@
                 "from": "address:owner",
                 "contractCode": "file:../output/adder.wasm",
                 "arguments": [
-                    "str:WBT-xxxxxx"
+                    "str:LKMEX-aaa111",
+                    "15"
                 ],
                 "gasLimit": "5,000,000",
                 "gasPrice": "0"
@@ -45,9 +50,9 @@
             "tx": {
                 "from": "address:owner",
                 "to": "sc:adder",
-                "function": "addTokenAllowed",
+                "function": "addFromToken",
                 "arguments": [
-                    "str:WBT-abcdef"
+                    "str:LKMEX-bbb222"
                 ],
                 "gasLimit": "5,000,000",
                 "gasPrice": "0"
@@ -62,9 +67,28 @@
             "step": "scCall",
             "txId": "3",
             "tx": {
+                "from": "address:not_owner",
+                "to": "sc:adder",
+                "function": "addFromToken",
+                "arguments": [
+                    "str:LKMEX-ccc333"
+                ],
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "4",
+                "logs": []
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "4",
+            "tx": {
                 "from": "address:owner",
                 "to": "sc:adder",
-                "function": "addTokenAllowed",
+                "function": "addFromToken",
                 "arguments": [
                     "str:invalid token"
                 ],
@@ -73,10 +97,48 @@
             },
             "expect": {
                 "out": [],
-                "status": "",
+                "status": "4",
                 "logs": [],
                 "gas": "*",
                 "refund": "*"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "5",
+            "tx": {
+                "from": "address:owner",
+                "to": "sc:adder",
+                "function": "addFromToken",
+                "arguments": [
+                    ""
+                ],
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "4",
+                "logs": [],
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scQuery",
+            "txId": "6",
+            "tx": {
+                "to": "sc:adder",
+                "function": "getFromTokens",
+                "arguments": []
+            },
+            "expect": {
+                "out": [
+                    "str:LKMEX-aaa111",
+                    "str:LKMEX-bbb222"
+                ],
+                "status": "",
+                "logs": []
             }
         }
     ]

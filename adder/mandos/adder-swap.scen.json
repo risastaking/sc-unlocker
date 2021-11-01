@@ -1,0 +1,180 @@
+{
+    "name": "adder",
+    "comment": "swapping mechanism",
+    "gasSchedule": "v3",
+    "steps": [
+        {
+            "step": "setState",
+            "accounts": {
+                "address:owner": {
+                    "nonce": "1",
+                    "balance": "0",
+                    "esdt": {
+                        "str:MEX-000001": "400"
+                    }
+                },
+                "address:user_1": {
+                    "nonce": "44",
+                    "balance": "0",
+                    "esdt": {
+                        "str:LKMEX-123456": {
+                            "instances": [
+                                {
+                                    "nonce": "24",
+                                    "balance": "1"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "newAddresses": [
+                {
+                    "creatorAddress": "address:owner",
+                    "creatorNonce": "1",
+                    "newAddress": "sc:adder"
+                }
+            ]
+        },
+        {
+            "step": "scDeploy",
+            "txId": "1",
+            "tx": {
+                "from": "address:owner",
+                "contractCode": "file:../output/adder.wasm",
+                "arguments": [
+                    "str:LKMEX-123456",
+                    "15"
+                ],
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "logs": [],
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "2",
+            "tx": {
+                "from": "address:owner",
+                "to": "sc:adder",
+                "function": "sendSc",
+                "esdtValue": [
+                    {
+                        "tokenIdentifier": "str:MEX-000001",
+                        "nonce": "0",
+                        "value": "200"
+                    }
+                ],
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": ["200"],
+                "status": ""
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "3",
+            "tx": {
+                "from": "address:user_1",
+                "to": "sc:adder",
+                "function": "swap",
+                "esdtValue": [
+                    {
+                        "tokenIdentifier": "str:LKMEX-123456",
+                        "nonce": "24",
+                        "value": "1"
+                    }
+                ],
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": ["1"],
+                "status": ""
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "3-testid",
+            "tx": {
+                "from": "address:user_1",
+                "to": "sc:adder",
+                "function": "getLastError",
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": ["0"],
+                "status": ""
+            }
+        },
+        {
+            "step": "checkState",
+            "comment": "check account balances",
+                "accounts": {
+                    "address:owner": {
+                        "nonce": "3",
+                        "balance": "0",
+                        "esdt": {
+                            "str:MEX-000001": "200"
+                        }
+                    },
+                    "sc:adder": {
+                        "nonce": "0",
+                        "balance": "0",
+                        "esdt": {
+                            "str:MEX-000001": "200",
+                            "str:LKMEX-123456": {
+                                "instances": [
+                                    {
+                                        "nonce": "24",
+                                        "balance": "1"
+                                    }
+                                ]
+                            }
+                        },
+                        "storage": {
+                            "+": ""
+                        }
+                    },
+                    "address:user_1": {
+                        "nonce": "46",
+                        "balance": "0",
+                        "esdt": {
+                            "str:MEX-000001": "2222",
+                            "str:LKMEX-123456": {
+                                "instances": [
+                                    {
+                                        "nonce": "24",
+                                        "balance": "0"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+        },
+
+        {
+            "step": "scQuery",
+            "txId": "4",
+            "tx": {
+                "to": "sc:adder",
+                "function": "getLiquidityBalance"
+            },
+            "expect": {
+                "out": [""],
+                "status": "",
+                "logs": []
+            }
+        }
+    ]
+}

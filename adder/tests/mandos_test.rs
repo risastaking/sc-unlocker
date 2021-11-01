@@ -16,3 +16,7 @@ fn contract_map() -> BlockchainMock {
 fn adder_rs() {
     elrond_wasm_debug::mandos_rs("mandos/adder.scen.json", contract_map());
 }
+#[test]
+fn adder_swap_rs() {
+    elrond_wasm_debug::mandos_rs("mandos/adder-swap.scen.json", contract_map());
+}
