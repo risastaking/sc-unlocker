@@ -1,9 +1,9 @@
 [package]
 name = "adder"
-version = "0.0.0"
-authors = [ "you",]
+version = "1.0.0"
+authors = [ "@RisaSoftStaking",]
 edition = "2018"
-publish = false
+publish = true
 
 [lib]
 path = "src/lib.rs"
