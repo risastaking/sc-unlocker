@@ -16,6 +16,7 @@ fn contract_map() -> BlockchainMock {
 fn unlocker_rs() {
     elrond_wasm_debug::mandos_rs("mandos/unlocker.scen.json", contract_map());
 }
+
 #[test]
 fn unlocker_deploy_validations_rs() {
     elrond_wasm_debug::mandos_rs(
@@ -23,7 +24,13 @@ fn unlocker_deploy_validations_rs() {
         contract_map(),
     );
 }
+
 #[test]
 fn unlocker_swap_rs() {
     elrond_wasm_debug::mandos_rs("mandos/unlocker-swap.scen.json", contract_map());
+}
+
+#[test]
+fn unlocker_withdraw_rs() {
+    elrond_wasm_debug::mandos_rs("mandos/unlocker-withdraw.scen.json", contract_map());
 }

@@ -43,14 +43,13 @@ pub trait Unlocker {
         );
 
         let fee_percent = self.fee_percent().get();
-
         require!(&fee_percent > &0, "zero fee");
+
         let fee = self.calculate_percentage(&amount, &fee_percent);
         let amount_after_fee = &amount - &fee;
-        let sc_balance = self.get_balance();
 
         require!(&amount_after_fee < &amount, "incorrect fee");
-        require!(&amount_after_fee <= &sc_balance, "no liquidity");
+        require!(&amount_after_fee <= &self.get_liquidity_balance(), "no liquidity");
         require!(&amount_after_fee > &0, "nothing to send");
         self.send().direct(
             &self.blockchain().get_caller(),
@@ -65,6 +64,13 @@ pub trait Unlocker {
     fn calculate_percentage(&self, total_amount: &BigUint, percentage: &BigUint) -> BigUint {
         total_amount * percentage / PERCENTAGE_TOTAL
     }
+
+    #[view(getLiquidityBalance)]
+    fn get_liquidity_balance(&self) -> BigUint {
+        self.blockchain().get_sc_balance(&self.to_token().get(), 0)
+    }
+
+    // OWNER ENDPOINTS
 
     #[only_owner]
     #[endpoint(addFromToken)]
@@ -89,9 +95,20 @@ pub trait Unlocker {
             new_fee_percentage > 0 && new_fee_percentage < PERCENTAGE_TOTAL,
             "Invalid percentage value, should be between 0 and 10,000"
         );
-
         self.fee_percent().set(&BigUint::from(new_fee_percentage));
+        Ok(())
+    }
 
+    #[only_owner]
+    #[endpoint(withdraw)]
+    fn withdraw(&self, token: TokenIdentifier, nonce: u64) -> SCResult<()> {
+        self.send().direct(
+            &self.blockchain().get_owner_address(),
+            &token,
+            nonce,
+            &self.blockchain().get_sc_balance(&token, nonce),
+            &[],
+        );
         Ok(())
     }
 
@@ -106,9 +123,4 @@ pub trait Unlocker {
     #[view(getFromTokens)]
     #[storage_mapper("from_tokens")]
     fn from_tokens(&self) -> SetMapper<TokenIdentifier>;
-
-    #[view(getLiquidityBalance)]
-    fn get_balance(&self) -> BigUint {
-        self.blockchain().get_sc_balance(&self.to_token().get(), 0)
-    }
 }
