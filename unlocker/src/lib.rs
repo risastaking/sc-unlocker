@@ -4,7 +4,7 @@ elrond_wasm::imports!();
 const PERCENTAGE_TOTAL: u32 = 10_000; // 100%
 
 #[elrond_wasm::contract]
-pub trait Adder {
+pub trait Unlocker {
     #[proxy]
     fn self_proxy(&self) -> self::Proxy<Self::Api>;
 

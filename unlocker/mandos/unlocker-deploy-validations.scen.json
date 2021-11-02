@@ -1,5 +1,5 @@
 {
-    "name": "adder",
+    "name": "unlocker",
     "comment": "deploy validations",
     "gasSchedule": "v3",
     "steps": [
@@ -32,17 +32,17 @@
                 {
                     "creatorAddress": "address:owner",
                     "creatorNonce": "1",
-                    "newAddress": "sc:adder-1"
+                    "newAddress": "sc:unlocker-1"
                 },
                 {
                     "creatorAddress": "address:owner",
                     "creatorNonce": "2",
-                    "newAddress": "sc:adder-2"
+                    "newAddress": "sc:unlocker-2"
                 },
                 {
                     "creatorAddress": "address:owner",
                     "creatorNonce": "3",
-                    "newAddress": "sc:adder-3"
+                    "newAddress": "sc:unlocker-3"
                 }
             ]
         },
@@ -51,7 +51,7 @@
             "txId": "1",
             "tx": {
                 "from": "address:owner",
-                "contractCode": "file:../output/adder.wasm",
+                "contractCode": "file:../output/unlocker.wasm",
                 "arguments": [
                     "str:LKMEX-1234567",
                     "str:MEX-000001",
@@ -74,7 +74,7 @@
             "txId": "2",
             "tx": {
                 "from": "address:owner",
-                "contractCode": "file:../output/adder.wasm",
+                "contractCode": "file:../output/unlocker.wasm",
                 "arguments": [
                     "str:LKMEX-123456",
                     "str:MEX-0",
@@ -97,7 +97,7 @@
             "txId": "3",
             "tx": {
                 "from": "address:owner",
-                "contractCode": "file:../output/adder.wasm",
+                "contractCode": "file:../output/unlocker.wasm",
                 "arguments": [
                     "str:LKMEX-000000",
                     "str:MEX-000000",

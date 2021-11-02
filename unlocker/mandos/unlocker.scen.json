@@ -1,5 +1,5 @@
 {
-    "name": "adder",
+    "name": "unlocker",
     "comment": "deploy then check",
     "gasSchedule": "v3",
     "steps": [
@@ -19,7 +19,7 @@
                 {
                     "creatorAddress": "address:owner",
                     "creatorNonce": "1",
-                    "newAddress": "sc:adder"
+                    "newAddress": "sc:unlocker"
                 }
             ]
         },
@@ -28,7 +28,7 @@
             "txId": "1",
             "tx": {
                 "from": "address:owner",
-                "contractCode": "file:../output/adder.wasm",
+                "contractCode": "file:../output/unlocker.wasm",
                 "arguments": [
                     "str:LKMEX-aaa111",
                     "str:MEX-000000",
@@ -50,7 +50,7 @@
             "txId": "2",
             "tx": {
                 "from": "address:owner",
-                "to": "sc:adder",
+                "to": "sc:unlocker",
                 "function": "addFromToken",
                 "arguments": [
                     "str:LKMEX-bbb222"
@@ -69,7 +69,7 @@
             "txId": "3",
             "tx": {
                 "from": "address:not_owner",
-                "to": "sc:adder",
+                "to": "sc:unlocker",
                 "function": "addFromToken",
                 "arguments": [
                     "str:LKMEX-ccc333"
@@ -88,7 +88,7 @@
             "txId": "4",
             "tx": {
                 "from": "address:owner",
-                "to": "sc:adder",
+                "to": "sc:unlocker",
                 "function": "addFromToken",
                 "arguments": [
                     "str:invalid token"
@@ -109,7 +109,7 @@
             "txId": "5",
             "tx": {
                 "from": "address:owner",
-                "to": "sc:adder",
+                "to": "sc:unlocker",
                 "function": "addFromToken",
                 "arguments": [
                     ""
@@ -129,7 +129,7 @@
             "step": "scQuery",
             "txId": "6",
             "tx": {
-                "to": "sc:adder",
+                "to": "sc:unlocker",
                 "function": "getFromTokens",
                 "arguments": []
             },

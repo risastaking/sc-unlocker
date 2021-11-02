@@ -13,5 +13,5 @@ Cargo.lock
 .vscode/*
 elrond.workspace.json
 
-adder/testnet
-adder/wallets
+unlocker/testnet
+unlocker/wallets

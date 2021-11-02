@@ -1,5 +1,5 @@
 {
-    "name": "adder",
+    "name": "unlocker",
     "comment": "swapping mechanism",
     "gasSchedule": "v3",
     "steps": [
@@ -32,7 +32,7 @@
                 {
                     "creatorAddress": "address:owner",
                     "creatorNonce": "1",
-                    "newAddress": "sc:adder"
+                    "newAddress": "sc:unlocker"
                 }
             ]
         },
@@ -41,7 +41,7 @@
             "txId": "1",
             "tx": {
                 "from": "address:owner",
-                "contractCode": "file:../output/adder.wasm",
+                "contractCode": "file:../output/unlocker.wasm",
                 "arguments": [
                     "str:LKMEX-123456",
                     "str:MEX-000001",
@@ -63,7 +63,7 @@
             "txId": "2",
             "tx": {
                 "from": "address:owner",
-                "to": "sc:adder",
+                "to": "sc:unlocker",
                 "esdtValue": [
                     {
                         "tokenIdentifier": "str:MEX-000001",
@@ -75,7 +75,9 @@
                 "gasPrice": "0"
             },
             "expect": {
-                "out": [""],
+                "out": [
+                    ""
+                ],
                 "status": ""
             }
         },
@@ -84,7 +86,7 @@
             "txId": "3",
             "tx": {
                 "from": "address:user_1",
-                "to": "sc:adder",
+                "to": "sc:unlocker",
                 "function": "swap",
                 "esdtValue": [
                     {
@@ -101,7 +103,7 @@
                 "status": "",
                 "logs": [
                     {
-                        "address": "sc:adder",
+                        "address": "sc:unlocker",
                         "endpoint": "str:ESDTTransfer",
                         "topics": [
                             "*"
@@ -114,58 +116,60 @@
         {
             "step": "checkState",
             "comment": "check account balances",
-                "accounts": {
-                    "address:owner": {
-                        "nonce": "3",
-                        "balance": "0",
-                        "esdt": {
-                            "str:MEX-000001": "0"
+            "accounts": {
+                "address:owner": {
+                    "nonce": "3",
+                    "balance": "0",
+                    "esdt": {
+                        "str:MEX-000001": "0"
+                    }
+                },
+                "sc:unlocker": {
+                    "nonce": "0",
+                    "balance": "0",
+                    "esdt": {
+                        "str:MEX-000001": "391,500",
+                        "str:LKMEX-123456": {
+                            "instances": [
+                                {
+                                    "nonce": "24",
+                                    "balance": "10,000"
+                                }
+                            ]
                         }
                     },
-                    "sc:adder": {
-                        "nonce": "0",
-                        "balance": "0",
-                        "esdt": {
-                            "str:MEX-000001": "391,500",
-                            "str:LKMEX-123456": {
-                                "instances": [
-                                    {
-                                        "nonce": "24",
-                                        "balance": "10,000"
-                                    }
-                                ]
-                            }
-                        },
-                        "storage": {
-                            "+": ""
-                        }
-                    },
-                    "address:user_1": {
-                        "nonce": "2",
-                        "balance": "0",
-                        "esdt": {
-                            "str:MEX-000001": "8,500",
-                            "str:LKMEX-123456": {
-                                "instances": [
-                                    {
-                                        "nonce": "24",
-                                        "balance": "0"
-                                    }
-                                ]
-                            }
+                    "storage": {
+                        "+": ""
+                    }
+                },
+                "address:user_1": {
+                    "nonce": "2",
+                    "balance": "0",
+                    "esdt": {
+                        "str:MEX-000001": "8,500",
+                        "str:LKMEX-123456": {
+                            "instances": [
+                                {
+                                    "nonce": "24",
+                                    "balance": "0"
+                                }
+                            ]
                         }
                     }
                 }
+            }
         },
         {
             "step": "scQuery",
             "txId": "4",
             "tx": {
-                "to": "sc:adder",
+                "to": "sc:unlocker",
                 "function": "getLiquidityBalance"
             },
             "expect": {
-                "out": ["391,500"],
+                "out": [
+                    "391,500"
+                ],
                 "status": "",
                 "logs": []
             }
