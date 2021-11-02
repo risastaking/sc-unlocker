@@ -1,16 +1,22 @@
 [package]
 name = "unlocker"
-version = "1.0.0"
+version = "0.0.0"
 authors = [ "@RisaSoftStaking",]
 edition = "2018"
-publish = true
+publish = false
 
 [lib]
 path = "src/lib.rs"
 
+[features]
+wasm-output-mode = [ "elrond-wasm-node",]
+
 [dependencies.elrond-wasm]
 version = "0.21.2"
-features = ["cb_closure_managed_deser"]
 
 [dev-dependencies.elrond-wasm-debug]
 version = "0.21.2"
+
+[dependencies.elrond-wasm-node]
+version = "0.21.2"
+optional = true

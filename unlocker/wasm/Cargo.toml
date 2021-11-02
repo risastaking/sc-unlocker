@@ -1,17 +1,13 @@
 [package]
 name = "unlocker-wasm"
 version = "0.0.0"
-authors = [ "you",]
+authors = [ "@RisaSoftStaking",]
 edition = "2018"
 publish = false
 
+
 [lib]
-crate-type = [ "cdylib",]
-
-[workspace]
-members = [ ".",]
-
-[dev-dependencies]
+crate-type = ["cdylib"]
 
 [profile.release]
 codegen-units = 1
@@ -22,9 +18,14 @@ panic = "abort"
 
 [dependencies.unlocker]
 features = [ "wasm-output-mode",]
-default-features = false
 path = ".."
 
+[dependencies.elrond-wasm-node]
+version = "0.21.2"
+
 [dependencies.elrond-wasm-output]
-version = "0.21.1"
-features = [ "wasm-output-mode",]
+version = "0.21.2"
+features = ["wasm-output-mode"]
+
+[workspace]
+members = ["."]
