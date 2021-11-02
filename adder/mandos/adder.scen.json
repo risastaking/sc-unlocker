@@ -1,6 +1,6 @@
 {
     "name": "adder",
-    "comment": "add then check",
+    "comment": "deploy then check",
     "gasSchedule": "v3",
     "steps": [
         {
@@ -31,6 +31,7 @@
                 "contractCode": "file:../output/adder.wasm",
                 "arguments": [
                     "str:LKMEX-aaa111",
+                    "str:MEX-000000",
                     "15"
                 ],
                 "gasLimit": "5,000,000",
