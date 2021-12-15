@@ -2,6 +2,8 @@
 
 elrond_wasm::imports!();
 const PERCENTAGE_TOTAL: u32 = 10_000; // 100%
+const MINIMUM_DEPOSIT: u64 = 1_000;
+
 
 #[elrond_wasm::contract]
 pub trait Unlocker {
@@ -58,6 +60,30 @@ pub trait Unlocker {
             &amount_after_fee,
             &[],
         );
+        Ok(())
+    }
+
+    #[payable("*")]
+    #[endpoint(deposit)]
+    fn deposit(
+        &self,
+        #[payment_token] token_id: TokenIdentifier,
+        #[payment_amount] amount: BigUint,
+    ) -> SCResult<()> {
+        let caller = self.blockchain().get_caller();
+        require!(!caller.is_zero(), "invalid caller");
+        require!(
+            self.to_token().get() == token_id,
+            "token not supported"
+        );
+        require!(amount > 0, "incorrect amount");
+        let minimum_deposit = self.types().big_uint_from(MINIMUM_DEPOSIT);
+        require!(
+            amount >= minimum_deposit,
+            "Deposit amount must be greater than or equal to minimum deposit"
+        );
+
+        self.depositor_balance(&caller).update(|balance| *balance += amount);
         Ok(())
     }
 
@@ -123,4 +149,8 @@ pub trait Unlocker {
     #[view(getFromTokens)]
     #[storage_mapper("from_tokens")]
     fn from_tokens(&self) -> SetMapper<TokenIdentifier>;
+
+    #[view(getBalance)]
+    #[storage_mapper("depositor_balance")]
+    fn depositor_balance(&self, address: &ManagedAddress) -> SingleValueMapper<BigUint>;
 }

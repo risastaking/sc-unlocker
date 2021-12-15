@@ -34,3 +34,13 @@ fn unlocker_swap_rs() {
 fn unlocker_withdraw_rs() {
     elrond_wasm_debug::mandos_rs("mandos/unlocker-withdraw.scen.json", contract_map());
 }
+
+#[test]
+fn unlocker_deposit_rs() {
+    elrond_wasm_debug::mandos_rs("mandos/unlocker-deposit.scen.json", contract_map());
+}
+
+#[test]
+fn unlocker_deposit_multi_rs() {
+    elrond_wasm_debug::mandos_rs("mandos/unlocker-deposit-multi.scen.json", contract_map());
+}
