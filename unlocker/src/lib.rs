@@ -83,17 +83,53 @@ pub trait Unlocker {
             "Deposit amount must be greater than or equal to minimum deposit"
         );
 
-        self.depositor_balance(&caller).update(|balance| *balance += amount);
-        Ok(())
-    }
+        let amount_with_fees = self.calculate_amount_with_fees(&amount);
 
-    fn calculate_percentage(&self, total_amount: &BigUint, percentage: &BigUint) -> BigUint {
-        total_amount * percentage / PERCENTAGE_TOTAL
+        self.depositor_balance(&caller).update(|balance| *balance += &amount_with_fees);
+        Ok(())
     }
 
     #[view(getLiquidityBalance)]
     fn get_liquidity_balance(&self) -> BigUint {
         self.blockchain().get_sc_balance(&self.to_token().get(), 0)
+    }
+
+    #[endpoint(harvest)]
+    fn harvest(&self, token: TokenIdentifier, nonce: u64, amount: BigUint) -> SCResult<()> {
+        let caller = self.blockchain().get_caller();
+        require!(!caller.is_zero(), "invalid caller");
+
+        let sc_balance = self.blockchain().get_sc_balance(&token, nonce);
+        let dep_balance = self.depositor_balance(&caller).get();
+
+        require!(self.from_tokens().contains(&token),"token not supported");
+        require!(&amount > &0,"Invalid amount");
+        require!(&sc_balance > &0,"Insufficient contract funds (0)");
+        require!(&dep_balance > &0,"Insufficient depositor funds (0)");
+        require!(&sc_balance >= &amount,"Insufficient sc funds");
+        require!(&dep_balance >= &amount,"Insufficient depositor funds");
+
+        self.send().direct(
+            &caller,
+            &token,
+            nonce,
+            &amount,
+            &[],
+        );
+
+        self.depositor_balance(&caller).update(|balance| *balance -= &amount);
+        Ok(())
+    }
+
+    // PRIVATE METHODS
+    fn calculate_percentage(&self, total_amount: &BigUint, percentage: &BigUint) -> BigUint {
+        total_amount * percentage / PERCENTAGE_TOTAL
+    }
+    fn calculate_amount_with_fees(&self, amount: &BigUint) -> BigUint {
+        let fee_percent = self.fee_percent().get();
+        let fee = self.calculate_percentage(&amount, &fee_percent);
+
+        amount + &fee
     }
 
     // OWNER ENDPOINTS

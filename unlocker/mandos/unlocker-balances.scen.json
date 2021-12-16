@@ -1,0 +1,152 @@
+{
+    "name": "unlocker",
+    "comment": "withdraw deposited funds with rewards mechanism",
+    "gasSchedule": "v3",
+    "steps": [
+        {
+            "step": "setState",
+            "accounts": {
+                "address:owner": {
+                    "nonce": "1",
+                    "balance": "0",
+                    "esdt": {
+                        "str:LKMEX-000001": {
+                            "instances": [
+                                {
+                                    "nonce": "42",
+                                    "balance": "10,000"
+                                }
+                            ]
+                        },
+                        "str:MEX-000001": {
+                            "instances": [
+                                {
+                                    "nonce": "0",
+                                    "balance": "10,000"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "address:depositor": {
+                    "nonce": "1",
+                    "balance": "0",
+                    "esdt": {
+                        "str:MEX-000001": {
+                            "instances": [
+                                {
+                                    "nonce": "0",
+                                    "balance": "5,000,000"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "newAddresses": [
+                {
+                    "creatorAddress": "address:owner",
+                    "creatorNonce": "1",
+                    "newAddress": "sc:unlocker"
+                }
+            ]
+        },
+        {
+            "step": "scDeploy",
+            "txId": "1",
+            "tx": {
+                "from": "address:owner",
+                "contractCode": "file:../output/unlocker.wasm",
+                "arguments": [
+                    "str:LKMEX-000001",
+                    "str:MEX-000001",
+                    "1500"
+                ],
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": "",
+                "logs": [],
+                "gas": "*",
+                "refund": "*"
+            }
+        },
+        {
+            "step": "scCall",
+            "txId": "5",
+            "tx": {
+                "from": "address:depositor",
+                "to": "sc:unlocker",
+                "function": "deposit",
+                "esdtValue": [
+                    {
+                        "tokenIdentifier": "str:MEX-000001",
+                        "value": "5,000,000"
+                    }
+                ],
+                "gasLimit": "5,000,000",
+                "gasPrice": "0"
+            },
+            "expect": {
+                "out": [],
+                "status": ""
+            }
+        },
+        {
+            "step": "scQuery",
+            "txId": "7",
+            "tx": {
+                "to": "sc:unlocker",
+                "function": "getBalance",
+                "arguments": [
+                    "address:depositor"
+                ]
+            },
+            "expect": {
+                "out": [
+                    "5,750,000"
+                ],
+                "status": "",
+                "logs": []
+            }
+        },
+        {
+            "step": "scQuery",
+            "txId": "8",
+            "tx": {
+                "to": "sc:unlocker",
+                "function": "getBalance",
+                "arguments": [
+                    "address:nonexistent"
+                ]
+            },
+            "expect": {
+                "out": [
+                    "0"
+                ],
+                "status": "",
+                "logs": []
+            }
+        },
+        {
+            "step": "scQuery",
+            "txId": "9",
+            "tx": {
+                "to": "sc:unlocker",
+                "function": "getBalance",
+                "arguments": [
+                    "address:nonexistent"
+                ]
+            },
+            "expect": {
+                "out": [
+                    "0"
+                ],
+                "status": "",
+                "logs": []
+            }
+        }
+    ]
+}

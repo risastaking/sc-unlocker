@@ -44,3 +44,13 @@ fn unlocker_deposit_rs() {
 fn unlocker_deposit_multi_rs() {
     elrond_wasm_debug::mandos_rs("mandos/unlocker-deposit-multi.scen.json", contract_map());
 }
+
+#[test]
+fn unlocker_balances_rs() {
+    elrond_wasm_debug::mandos_rs("mandos/unlocker-balances.scen.json", contract_map());
+}
+
+#[test]
+fn unlocker_harvest_rs() {
+    elrond_wasm_debug::mandos_rs("mandos/unlocker-harvest.scen.json", contract_map());
+}
